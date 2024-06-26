@@ -29,12 +29,12 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Common Compression 7z Native</name>
+  <name>Module Compression 7z Native</name>
   <description>Native code for the 7z library usage</description>
   <inceptionYear>2024</inceptionYear>
   <url>https://engine.yildiz-games.be</url>
 
-  <artifactId>common-compression-7z-native</artifactId>
+  <artifactId>module-compression-7z-native</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <parent>
@@ -46,9 +46,9 @@
   <packaging>jar</packaging>
 
   <scm>
-    <connection>scm:git:https://github.com/yildiz-online/common-compression-7z-native</connection>
-    <developerConnection>scm:git:https://github.com/yildiz-online/common-compression-7z-native</developerConnection>
-    <url>https://github.com/yildiz-online/common-compression-7z-native</url>
+    <connection>scm:git:https://github.com/yildiz-online/module-compression-7z-native</connection>
+    <developerConnection>scm:git:https://github.com/yildiz-online/module-compression-7z-native</developerConnection>
+    <url>https://github.com/yildiz-online/module-compression-7z-native</url>
   </scm>
 
 </project>
