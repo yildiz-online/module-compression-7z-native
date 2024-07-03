@@ -17,7 +17,7 @@
 #include <bitarchivereader.hpp>
 #include <bitfilecompressor.hpp>
 
-LIB_EXPORT int decompress(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory) {
+LIB_EXPORT int decompress7z(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory) {
 
     try {
         bit7z::Bit7zLibrary nativeLib { lib7zipPath };
@@ -29,7 +29,19 @@ LIB_EXPORT int decompress(const char* lib7zipPath, const char* archiveFile, cons
     }
 }
 
-LIB_EXPORT int compressSingleFile(const char* lib7zipPath, const char* fileToCompress, const char* outputFile) {
+LIB_EXPORT int decompressZip(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory) {
+
+    try {
+        bit7z::Bit7zLibrary nativeLib { lib7zipPath };
+        bit7z::BitArchiveReader archive{ nativeLib, archiveFile, bit7z::BitFormat::Zip };
+        archive.extractTo(outputDirectory);
+        return 0;
+    } catch ( const bit7z::BitException& ex ) {
+        return ex.posixCode();
+    }
+}
+
+LIB_EXPORT int compressSingleFile7z(const char* lib7zipPath, const char* fileToCompress, const char* outputFile) {
     try {
         bit7z::Bit7zLibrary nativeLib { lib7zipPath };
         bit7z::BitArchiveWriter archive{ nativeLib, bit7z::BitFormat::SevenZip };
@@ -42,7 +54,36 @@ LIB_EXPORT int compressSingleFile(const char* lib7zipPath, const char* fileToCom
     }
 }
 
-LIB_EXPORT int compressMultipleFiles(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile) {
+LIB_EXPORT int compressSingleFileZip(const char* lib7zipPath, const char* fileToCompress, const char* outputFile) {
+    try {
+        bit7z::Bit7zLibrary nativeLib { lib7zipPath };
+        bit7z::BitArchiveWriter archive{ nativeLib, bit7z::BitFormat::Zip };
+        archive.addFile(fileToCompress);
+        archive.setCompressionLevel(bit7z::BitCompressionLevel::Ultra);
+        archive.compressTo(outputFile);
+        return 0;
+    } catch ( const bit7z::BitException& ex ) {
+        return ex.posixCode();
+    }
+}
+
+LIB_EXPORT int compressMultipleFilesZip(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile) {
+    try {
+        bit7z::Bit7zLibrary nativeLib { lib7zipPath };
+        bit7z::BitFileCompressor compressor{ nativeLib, bit7z::BitFormat::Zip };
+        std::vector<std::string> files;
+        for(int i = 0; i < numberOfFiles; i++) {
+            files.push_back(filesToCompress[i]);
+        }
+        compressor.setCompressionLevel(bit7z::BitCompressionLevel::Ultra);
+        compressor.compressFiles(files, outputFile);
+        return 0;
+    } catch ( const bit7z::BitException& ex ) {
+        return ex.posixCode();
+    }
+}
+
+LIB_EXPORT int compressMultipleFiles7z(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile) {
     try {
         bit7z::Bit7zLibrary nativeLib { lib7zipPath };
         bit7z::BitFileCompressor compressor{ nativeLib, bit7z::BitFormat::SevenZip };

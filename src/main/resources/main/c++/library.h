@@ -25,11 +25,17 @@
 extern "C" {
 #endif
 
-    LIB_EXPORT int decompress(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory);
+    LIB_EXPORT int decompress7z(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory);
 
-    LIB_EXPORT int compressSingleFile(const char* lib7zipPath, const char* fileToCompress, const char* outputFile);
+    LIB_EXPORT int decompressZip(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory);
 
-    LIB_EXPORT int compressMultipleFiles(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile);
+    LIB_EXPORT int compressSingleFile7z(const char* lib7zipPath, const char* fileToCompress, const char* outputFile);
+
+    LIB_EXPORT int compressSingleFileZip(const char* lib7zipPath, const char* fileToCompress, const char* outputFile);
+
+    LIB_EXPORT int compressMultipleFiles7z(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile);
+
+    LIB_EXPORT int compressMultipleFilesZip(const char* lib7zipPath, const char** filesToCompress, int numberOfFiles, const char* outputFile);
 
 
 #ifdef __cplusplus
