@@ -16,6 +16,7 @@
 #include <bitarchivewriter.hpp>
 #include <bitarchivereader.hpp>
 #include <bitfilecompressor.hpp>
+#include <bitfileextractor.hpp>
 
 LIB_EXPORT int decompress7z(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory) {
 
@@ -29,12 +30,36 @@ LIB_EXPORT int decompress7z(const char* lib7zipPath, const char* archiveFile, co
     }
 }
 
+LIB_EXPORT int decompressFile7z(const char* lib7zipPath, const char* archiveFile, const char* fileToExtract, const char* outputDirectory) {
+
+    try {
+        bit7z::Bit7zLibrary nativeLib { lib7zipPath };
+        bit7z::BitFileExtractor extractor{ nativeLib, bit7z::BitFormat::SevenZip };
+        extractor.extractMatching(archiveFile, fileToExtract, outputDirectory);
+        return 0;
+    } catch ( const bit7z::BitException& ex ) {
+        return ex.posixCode();
+    }
+}
+
 LIB_EXPORT int decompressZip(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory) {
 
     try {
         bit7z::Bit7zLibrary nativeLib { lib7zipPath };
         bit7z::BitArchiveReader archive{ nativeLib, archiveFile, bit7z::BitFormat::Zip };
         archive.extractTo(outputDirectory);
+        return 0;
+    } catch ( const bit7z::BitException& ex ) {
+        return ex.posixCode();
+    }
+}
+
+LIB_EXPORT int decompressFileZip(const char* lib7zipPath, const char* archiveFile, const char* fileToExtract, const char* outputDirectory) {
+
+    try {
+        bit7z::Bit7zLibrary nativeLib { lib7zipPath };
+        bit7z::BitFileExtractor extractor{ nativeLib, bit7z::BitFormat::Zip };
+        extractor.extractMatching(archiveFile, fileToExtract, outputDirectory);
         return 0;
     } catch ( const bit7z::BitException& ex ) {
         return ex.posixCode();

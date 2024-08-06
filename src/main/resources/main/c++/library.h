@@ -27,7 +27,11 @@ extern "C" {
 
     LIB_EXPORT int decompress7z(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory);
 
+    LIB_EXPORT int decompressFile7z(const char* lib7zipPath, const char* archiveFile, const char* fileToExtract, const char* outputDirectory);
+
     LIB_EXPORT int decompressZip(const char* lib7zipPath, const char* archiveFile, const char* outputDirectory);
+
+    LIB_EXPORT int decompressFileZip(const char* lib7zipPath, const char* archiveFile, const char* fileToExtract, const char* outputDirectory);
 
     LIB_EXPORT int compressSingleFile7z(const char* lib7zipPath, const char* fileToCompress, const char* outputFile);
 
