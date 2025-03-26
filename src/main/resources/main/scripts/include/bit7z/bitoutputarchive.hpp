@@ -78,7 +78,9 @@ class BitOutputArchive {
          *                be used for creating the new archive and reading the (optional) input archive.
          * @param inFile  (optional) the path to an input archive file.
          */
-        explicit BitOutputArchive( const BitAbstractArchiveCreator& creator, const tstring& inFile );
+        explicit BitOutputArchive( const BitAbstractArchiveCreator& creator,
+                                   const tstring& inFile,
+                                   ArchiveStartOffset startOffset = ArchiveStartOffset::None );
 
         /**
          * @brief Constructs a BitOutputArchive object, opening an input file archive from the given buffer.
@@ -91,7 +93,9 @@ class BitOutputArchive {
          *                  be used for creating the new archive and reading the (optional) input archive.
          * @param inBuffer  the buffer containing an input archive file.
          */
-        BitOutputArchive( const BitAbstractArchiveCreator& creator, const std::vector< byte_t >& inBuffer );
+        BitOutputArchive( const BitAbstractArchiveCreator& creator,
+                          const buffer_t& inBuffer,
+                          ArchiveStartOffset startOffset = ArchiveStartOffset::None );
 
         /**
          * @brief Constructs a BitOutputArchive object, reading an input file archive from the given std::istream.
@@ -100,7 +104,9 @@ class BitOutputArchive {
          *                  be used for creating the new archive and reading the (optional) input archive.
          * @param inStream  the standard input stream of the input archive file.
          */
-        BitOutputArchive( const BitAbstractArchiveCreator& creator, std::istream& inStream );
+        BitOutputArchive( const BitAbstractArchiveCreator& creator,
+                          std::istream& inStream,
+                          ArchiveStartOffset startOffset = ArchiveStartOffset::None );
 
         BitOutputArchive( const BitOutputArchive& ) = delete;
 
@@ -186,11 +192,42 @@ class BitOutputArchive {
                        bool recursive = true );
 
         /**
-         * @brief Adds all the items inside the given directory path.
+         * @brief Adds the given directory path and all its content.
          *
-         * @param inDir the directory where to search for items to be added to the output archive.
+         * @param inDir the path of the directory to be added to the archive.
          */
         void addDirectory( const tstring& inDir );
+
+        /**
+         * @brief Adds the contents of the given directory path.
+         *
+         * This function iterates through the specified directory and adds its contents
+         * based on the provided wildcard filter. Optionally, the operation can be
+         * recursive, meaning it will include subdirectories and their contents.
+         *
+         * @param inDir     the directory where to search for files to be added to the output archive.
+         * @param filter    the wildcard filter to be used for searching the files.
+         * @param recursive recursively search the files in the given directory and all of its subdirectories.
+         */
+        void addDirectoryContents( const tstring& inDir, const tstring& filter, bool recursive );
+
+        /**
+         * @brief Adds the contents of the given directory path.
+         *
+         * This function iterates through the specified directory and adds its contents
+         * based on the provided wildcard filter and policy. Optionally, the operation can be
+         * recursive, meaning it will include subdirectories and their contents.
+         *
+         * @param inDir     the directory where to search for files to be added to the output archive.
+         * @param filter    (optional) the wildcard filter to be used for searching the files.
+         * @param recursive (optional) recursively search the files in the given directory
+         *                  and all of its subdirectories.
+         * @param policy    (optional) the filtering policy to be applied to the matched items.
+         */
+        void addDirectoryContents( const tstring& inDir,
+                                   const tstring& filter = BIT7Z_STRING( "*" ),
+                                   FilterPolicy policy = FilterPolicy::Include,
+                                   bool recursive = true );
 
         /**
          * @brief Compresses all the items added to this object to the specified archive file path.
@@ -313,7 +350,9 @@ class BitOutputArchive {
 
         auto initOutFileStream( const fs::path& outArchive, bool updatingArchive ) const -> CMyComPtr< IOutStream >;
 
-        BitOutputArchive( const BitAbstractArchiveCreator& creator, const fs::path& inArc );
+        BitOutputArchive( const BitAbstractArchiveCreator& creator,
+                          const fs::path& inArc,
+                          ArchiveStartOffset archiveStart );
 
         void compressToFile( const fs::path& outFile, UpdateCallback* updateCallback );
 
